@@ -13,7 +13,7 @@ import Modelo.Config;
  */
 public class frmConfiguracion extends javax.swing.JInternalFrame {
 
-    Config config;
+    Config cg;
     /**
      * Creates new form frmConfiguracion
      */
@@ -172,6 +172,14 @@ public class frmConfiguracion extends javax.swing.JInternalFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
+        String txt=JcombMotor.getItemAt(JcombMotor.getSelectedIndex()) + " " + txtServidor.getText()+ " " + txtUsuario.getText() +" "+txtContraseña.getText();
+        
+        cg=new Config();
+        cg.buscarconfig();
+        
+        //cg.config(txt);
+        
+        
         
     }//GEN-LAST:event_jButton1ActionPerformed
 

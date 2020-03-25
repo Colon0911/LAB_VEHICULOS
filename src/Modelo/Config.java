@@ -72,7 +72,7 @@ public class Config {
                 linea=bw.readLine();
                     if (linea!=null) {
                         datos=linea.split(" ");
-                         if ("que".equals(datos[1].trim())) {
+                         if ("fndfg".equals(datos[1].trim())) {
                             System.out.println(datos[0].trim()+" "+ datos[1].trim()+" "+datos[2].trim());
                          }
                     }else{

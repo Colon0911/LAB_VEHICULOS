@@ -16,6 +16,9 @@ public class ejemplo {
      */
     public static void main(String[] args) {
         // TODO code application logic here
+        Config nf=new Config();
+        
+        nf.config("hola");
     }
     
 }

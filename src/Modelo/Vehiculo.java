@@ -56,8 +56,8 @@ public class Vehiculo {
         this.Descripcion = null;
     }
     
-    public boolean comprobar(int Id, int Placa, String Descripcion){
-        if (Id!=0 && Placa!=0 && Descripcion!=null) {
+    public boolean comprobar(int Id, String Placa, String Descripcion){
+        if (Id!=0 && Placa!=null && Descripcion!=null) {
             return true;
         }else
             return false;

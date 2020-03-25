@@ -12,6 +12,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import tiendadevehiculos.frmConfiguracion;
 
 /**
  *
@@ -37,7 +38,7 @@ public class ControladorVehiculo {
             this.pst = cn.prepareStatement("insert into vehiculos values(?,?,?)");
         } catch (SQLException ex) {
             Logger.getLogger(ControladorVehiculo.class.getName()).log(Level.SEVERE, null, ex);
-            
+            new frmConfiguracion().setVisible(true);
         }
   
     }
