@@ -6,6 +6,7 @@
 package tiendadevehiculos;
 
 import Modelo.Config;
+import Modelo.ControladorVehiculo;
 
 /**
  *
@@ -14,6 +15,7 @@ import Modelo.Config;
 public class frmConfiguracion extends javax.swing.JInternalFrame {
 
     Config cg;
+    ControladorVehiculo control;
     /**
      * Creates new form frmConfiguracion
      */
@@ -76,7 +78,7 @@ public class frmConfiguracion extends javax.swing.JInternalFrame {
 
         jLabel5.setText("Contraseña ");
 
-        JcombMotor.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "InnoBD", "SEQUENCE", "MylSAM" }));
+        JcombMotor.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "mysql", "SEQUENCE", "MylSAM" }));
 
         txtUsuario.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -175,9 +177,13 @@ public class frmConfiguracion extends javax.swing.JInternalFrame {
         String txt=JcombMotor.getItemAt(JcombMotor.getSelectedIndex()) + " " + txtServidor.getText()+ " " + txtUsuario.getText() +" "+txtContraseña.getText();
         
         cg=new Config();
-        cg.buscarconfig();
-        
-        //cg.config(txt);
+       // cg.buscarconfig();
+       String[] tx=new String[3];
+       
+        cg.config(txt);
+        tx=cg.buscarconfig();
+        control=new ControladorVehiculo();
+        control.conectar(tx[0], tx[1], tx[2], tx[3]);
         
         
         

@@ -42,6 +42,15 @@ public class ControladorVehiculo {
         }
   
     }
+    public void conectar(String motor, String servidor, String usuario, String contraseña){
+        try {
+            this.cn = DriverManager.getConnection("\"jdbc:"+motor+"://"+servidor+"/empresavehiculos",usuario,contraseña);
+            this.pst = cn.prepareStatement("insert into vehiculos values(?,?,?)");
+        } catch (SQLException ex) {
+            Logger.getLogger(ControladorVehiculo.class.getName()).log(Level.SEVERE, null, ex);
+            
+        }  
+    }
     
     public boolean  Agregar(Vehiculo vehiculo){
         try {

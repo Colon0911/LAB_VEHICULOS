@@ -12,8 +12,6 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -52,7 +50,7 @@ public class Config {
         }
     }
     
-    public void buscarconfig(){
+    public String[] buscarconfig(){
         File archivo=new File("C:\\Users\\johan\\OneDrive\\Documentos\\NetBeansProjects\\TiendaDeVehiculos\\Config.ini");
          if (!archivo.exists()) {
             try {
@@ -68,24 +66,25 @@ public class Config {
                 BufferedReader bw=new BufferedReader(fw);
                 String linea;
                 String [] datos;
-                do{
+//                do{
                 linea=bw.readLine();
-                    if (linea!=null) {
-                        datos=linea.split(" ");
-                         if ("fndfg".equals(datos[1].trim())) {
-                            System.out.println(datos[0].trim()+" "+ datos[1].trim()+" "+datos[2].trim());
-                         }
-                    }else{
-                        System.out.println("no se encontro");
-                    }
-                }while (linea!=null);
+//                    if (linea!=null) {
+                datos=linea.split(" ");
+//                         if (busca.equals(datos[posicion].trim())) {
+//                System.out.println(datos[0].trim()+" "+ datos[1].trim()+" "+datos[2].trim());
                 
-                
+//                         }
+//                    }else{
+//                        System.out.println("no se encontro");
+//                    }
+//                }while (linea!=null);
                 bw.close();
+                return datos;
             } catch (IOException ex) {
                 
             }
         }
+        return null;
     }
     
     
@@ -97,15 +96,18 @@ public class Config {
     public static void main(String[] args) {
         // TODO code application logic here
         Config cf=new Config();
-        String txt="hola que hace";
-        cf.config(txt);
-        try {
-            cf.muestraContenido("C:\\Users\\johan\\OneDrive\\Documentos\\NetBeansProjects\\TiendaDeVehiculos\\Config.ini");
-        } catch (IOException ex) {
-            Logger.getLogger(Config.class.getName()).log(Level.SEVERE, null, ex);
-        }
+//        String txt="hola que hace";
+//        cf.config(txt);
+//        try {
+//            cf.muestraContenido("C:\\Users\\johan\\OneDrive\\Documentos\\NetBeansProjects\\TiendaDeVehiculos\\Config.ini");
+//        } catch (IOException ex) {
+//            Logger.getLogger(Config.class.getName()).log(Level.SEVERE, null, ex);
+//        }
         
-        cf.buscarconfig();
+       
+        String[] v=new String[3];
+        v= cf.buscarconfig();
+        System.out.println(v[3]);
         
     }
     
