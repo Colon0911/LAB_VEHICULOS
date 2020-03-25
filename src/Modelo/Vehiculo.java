@@ -61,5 +61,11 @@ public class Vehiculo {
             return true;
         }else
             return false;
-    }  
+    }
+
+    @Override
+    public String toString() {
+        return "Vehiculo{" + "Id=" + Id + ", Placa=" + Placa + ", Descripcion=" + Descripcion + '}';
+    }
+    
 }
