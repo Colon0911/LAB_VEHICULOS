@@ -33,10 +33,11 @@ public class ControladorVehiculo {
     
     public void conectar(){
         try {
-            this.cn = DriverManager.getConnection("\"jdbc:mysql://localhost/empresavehiculos\",\"root\",\"\"");
+            this.cn = DriverManager.getConnection("\"jdbc:mysql://localhost/empresavehiculos","root","johansel");
             this.pst = cn.prepareStatement("insert into vehiculos values(?,?,?)");
         } catch (SQLException ex) {
             Logger.getLogger(ControladorVehiculo.class.getName()).log(Level.SEVERE, null, ex);
+            
         }
   
     }
