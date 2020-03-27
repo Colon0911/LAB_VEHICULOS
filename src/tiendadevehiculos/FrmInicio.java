@@ -53,6 +53,11 @@ public class FrmInicio extends javax.swing.JFrame {
         menuRegistro.setText("Registrar");
 
         jMenuItem1.setText("Vehiculos");
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem1ActionPerformed(evt);
+            }
+        });
         menuRegistro.add(jMenuItem1);
 
         jMenuItem2.setText("Salidas");
@@ -97,6 +102,13 @@ public class FrmInicio extends javax.swing.JFrame {
         nf.setVisible(true);
         pantalla.add(nf);
     }//GEN-LAST:event_jMenuItem4ActionPerformed
+
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+        // TODO add your handling code here:
+        FrmVehiculos v=new FrmVehiculos();
+        v.setVisible(true);
+        pantalla.add(v);
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     /**
      * @param args the command line arguments

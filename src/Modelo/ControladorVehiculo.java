@@ -53,11 +53,12 @@ public class ControladorVehiculo {
         try {
             this.cn = DriverManager.getConnection("jdbc:mysql://localhost/empresavehiculos?useServerPrepStmts=true", "root", "johansel");
            
-            pst = cn.prepareStatement("insert into vehiculos values(?,?,?)");
+            pst = cn.prepareStatement("insert into vehiculos values(null,?,?)");
         } catch (SQLException ex) {
             System.out.println("Error de conexion");
         }
     }
+      
     public void conectar(String motor, String servidor, String usuario, String contraseña){
         try {
             this.cn = DriverManager.getConnection("jdbc:"+motor+"://"+servidor+"/empresavehiculos?useServerPrepSrmts=true",usuario,contraseña);
@@ -69,16 +70,19 @@ public class ControladorVehiculo {
     }
     
     public boolean  Agregar(Vehiculo vehiculo){
-        try {
-            pst.setString(1, String.valueOf(vehiculo.getId()));
-            pst.setString(2, String.valueOf(vehiculo.getPlaca()));
-            pst.setString(3, String.valueOf(vehiculo.getDescripcion()));
-            pst.executeUpdate();
-            return true;
+      try {
+            //this.sentencias.executeUpdate("insert into datosgenerales values(null,'"+nombre+"','"+ciudad+"')");
+            this.pst.executeUpdate("insert into vehiculos values(null,'"+vehiculo.getPlaca()+"','"+vehiculo.getDescripcion()+"')",Statement.RETURN_GENERATED_KEYS);
+            this.rs=this.pst.getGeneratedKeys();
+            if(rs.next()){
+                rs.getInt(1);
+                return true;
+            }
         } catch (SQLException ex) {
-            Logger.getLogger(ControladorVehiculo.class.getName()).log(Level.SEVERE, null, ex);
-            return false;
+            System.out.println("ERROR AL AGREGAR");
+            
         }
+        return false;
     }
     
     public Vehiculo buscar(Vehiculo vehiculo){
@@ -87,11 +91,10 @@ public class ControladorVehiculo {
         try {
             
             pst = cn.prepareStatement("select * from vehiculos where placa = ?");
-             pst.setString(1, placa.trim());
+            pst.setString(1, placa.trim());
             rs=pst.executeQuery();
-           
-           
             if (rs.next()) {
+                vehiculo = new Vehiculo(rs.getInt("id"),rs.getString("placa"),rs.getString("descripcion"));
                 return vehiculo;
             }
             
@@ -103,32 +106,64 @@ public class ControladorVehiculo {
         return null;
     }
     
-    public boolean actualizar(Vehiculo vehiculo){
-       
-        return false;
+    public boolean actualizar(Vehiculo vehiculo, String dato){
         
-    }
-    public boolean eliminar(int id){
-        try {
-            pst = cn.prepareStatement("delete from vehiculos where id = "+id);
+        vehiculo.setDescripcion(dato);
+        String placa=vehiculo.getPlaca();
+        
+        if(vehiculo.getDescripcion()==dato){
+            try {
+                pst = cn.prepareStatement("select * from vehiculos where placa = ?");
+                pst.setString(1, placa.trim());
+                rs=pst.executeQuery();
+            if (rs.next()) {
+                vehiculo = new Vehiculo(rs.getInt("id"),rs.getString("placa"),rs.getString("descripcion"));
+                pst = cn.prepareStatement("UPDATE vehiculos SET descripcion=? WHERE id ="+vehiculo.getId());
+                pst.setString(1, dato);
+                pst.executeUpdate();
+            } 
+            } catch (SQLException ex) {
+                Logger.getLogger(ControladorVehiculo.class.getName()).log(Level.SEVERE, null, ex);
+            }
             
-            pst.executeUpdate();
-           
             return true;
-        } catch (SQLException ex) {
-            Logger.getLogger(ControladorVehiculo.class.getName()).log(Level.SEVERE, null, ex);
+        }else{
             return false;
         }
+       
+        
+        
     }
-    public ArrayList listar(String descricion){
+    public boolean eliminar(Vehiculo vehiculo){
+        try {
+                String placa=vehiculo.getPlaca();
+                pst = cn.prepareStatement("select * from vehiculos where placa = ?");
+                pst.setString(1, placa.trim());
+                rs=pst.executeQuery();
+            if (rs.next()) {
+                vehiculo = new Vehiculo(rs.getInt("id"),rs.getString("placa"),rs.getString("descripcion"));
+                pst = cn.prepareStatement("delete from vehiculos where id = "+vehiculo.getId());
+                pst.executeUpdate(); 
+                return true;
+            }
+            
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(ControladorVehiculo.class.getName()).log(Level.SEVERE, null, ex);     
+        }
+        return false;
+    } 
+   public ArrayList listar(String descripcion){
         ArrayList<Vehiculo> array=new ArrayList<>();
         try {
-            pst = cn.prepareStatement("select * from vehiculos where descripcion = like '"+descricion +"%'");
-            rs=pst.executeQuery();
            
-           
-            while (rs.next()) {
-               array.add(vehiculo);
+           pst = cn.prepareStatement("select * from vehiculos where descripcion like '"+descripcion.trim() +"%'");
+           rs=pst.executeQuery();
+  
+           while (rs.next()) {
+                vehiculo = new Vehiculo(rs.getInt("id"),rs.getString("placa"),rs.getString("descripcion"));
+                array.add(vehiculo);
+                  
             }
             
         } catch (SQLException ex) {
@@ -137,16 +172,53 @@ public class ControladorVehiculo {
         return array;
     }
     
+     public boolean validarPK(Vehiculo vehiculo){
+        String placa=vehiculo.getPlaca();
+        if(this.buscar(vehiculo)!=vehiculo){
+            System.out.println("no se encuentra");
+            return true;
+            
+        }else{
+            try {
+
+            pst = cn.prepareStatement("select * from vehiculos where placa = ?");
+            pst.setString(1, placa.trim());
+            rs=pst.executeQuery();
+            if(rs.next()){
+                
+                System.out.println(rs.getInt("id"));
+                System.out.println(rs.getString("placa"));
+                System.out.println(rs.getString("descripcion"));
+            }
+        } catch (SQLException ex) {
+            System.out.println("ERROR EN EL READ"); 
+        }
+            return false;
+        }
+        
+    }
+    public boolean validarFK(){
+        return true;
+    }
+    
 
 public static void main(String[] args) {
    ControladorVehiculo n=new ControladorVehiculo();
-   Vehiculo v=new Vehiculo(100, "ut", "rojo");
-   Vehiculo vv=new Vehiculo(1, "qwe", "negro");
+   Vehiculo v=new Vehiculo(0,"ut", "rojo");
+   Vehiculo vv=new Vehiculo(0,"qwet", "negro");
+   Vehiculo vvf=new Vehiculo(0,"hol", "blanco");
+   Vehiculo vvv=new Vehiculo(0,"qqqwwet", "nsdegro");
 
    //n.conectar("mysql", "127.0.0.1", "root", "johansel");
-    n.conectar();
-    //n.Agregar(vv);
-  //n.eliminar(100);
-    System.out.println(n.listar("n"));
-  System.out.println(n.buscar(vv));
+   n.conectar();
+  // n.Agregar(vvf);
+   //n.eliminar(100);
+   //System.out.println(n.listar("n"));
+    n.actualizar(vvf, "amarillo");
+     
+ //  System.out.println(n.buscar(vvf));
+//   n.validarPK(v);
+    
+     System.out.println( n.listar("b"));
+  
 }}

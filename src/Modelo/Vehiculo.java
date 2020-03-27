@@ -44,8 +44,8 @@ public class Vehiculo {
         this.Descripcion = null;
     }
 
-    public Vehiculo(int Id, String Placa, String Descripcion) {
-        this.Id = Id;
+    public Vehiculo(int id, String Placa, String Descripcion) {
+        this.Id = id;
         this.Placa = Placa;
         this.Descripcion = Descripcion;
     }
