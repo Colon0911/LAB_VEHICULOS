@@ -7,6 +7,7 @@ package tiendadevehiculos;
 
 import Modelo.ControladorVehiculo;
 import Modelo.Vehiculo;
+import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -110,10 +111,13 @@ public class FrmVehiculos extends javax.swing.JInternalFrame {
                 selectActionPerformed(evt);
             }
         });
+        select.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                selectKeyPressed(evt);
+            }
+        });
 
         jButton2.setText("jButton2");
-
-        descrip.setText("jTextField1");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -338,6 +342,9 @@ public class FrmVehiculos extends javax.swing.JInternalFrame {
 
     private void selectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selectActionPerformed
         // TODO add your handling code here:
+      
+            
+        
         ControladorVehiculo cv=new ControladorVehiculo();
         cv.conectar();
         String t=this.descrip.getText();
@@ -353,6 +360,10 @@ public class FrmVehiculos extends javax.swing.JInternalFrame {
         this.jDialog1.setVisible(true);
         this.jDialog1.setBounds(0, 0, this.getWidth()+20, this.getHeight()+150);
     }//GEN-LAST:event_buscarActionPerformed
+
+    private void selectKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_selectKeyPressed
+       
+    }//GEN-LAST:event_selectKeyPressed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

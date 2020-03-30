@@ -21,7 +21,7 @@ import tiendadevehiculos.frmConfiguracion;
  *
  * @author johan
  */
-public class ControladorVehiculo {
+public class ControladorVehiculo extends Vehiculo{
     private Connection cn;
     private PreparedStatement pst;
     private Statement psss;
@@ -35,20 +35,7 @@ public class ControladorVehiculo {
     public void setVehiculo(Vehiculo vehiculo) {
         this.vehiculo = vehiculo;
     }
-    
-//    public void conectar(){
-//        try {
-//            
-//            cn = DriverManager.getConnection("\"jdbc:mysql://localhost/empresavehiculos","root","johansel");
-//            pst = cn.prepareStatement("insert into vehiculos values(?,?,?)");
-//            System.out.println("se conecto");
-//        } catch (SQLException ex) {
-//            Logger.getLogger(ControladorVehiculo.class.getName()).log(Level.SEVERE, null, ex);
-//            //new frmConfiguracion().setVisible(true);
-//            System.out.println("hola");
-//        }
-//  
-//    }
+
       public void conectar(){
         try {
             this.cn = DriverManager.getConnection("jdbc:mysql://localhost/empresavehiculos?useServerPrepStmts=true", "root", "johansel");
