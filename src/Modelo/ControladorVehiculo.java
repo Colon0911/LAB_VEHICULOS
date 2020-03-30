@@ -193,15 +193,15 @@ public static void main(String[] args) {
    ControladorVehiculo n=new ControladorVehiculo();
    Vehiculo v=new Vehiculo(0,"ut", "rojo");
    Vehiculo vv=new Vehiculo(0,"qwet", "negro");
-   Vehiculo vvf=new Vehiculo(0,"hol", "blanco");
+   Vehiculo vvf=new Vehiculo(0,"34567", "Camaro");
    Vehiculo vvv=new Vehiculo(0,"qqqwwet", "nsdegro");
 
    //n.conectar("mysql", "127.0.0.1", "root", "johansel");
    n.conectar();
-  // n.Agregar(vvf);
+   n.Agregar(vvf);
    //n.eliminar(100);
    //System.out.println(n.listar("n"));
-    n.actualizar(vvf, "amarillo");
+   // n.actualizar(vvf, "amarillo");
      
  //  System.out.println(n.buscar(vvf));
 //   n.validarPK(v);

@@ -5,8 +5,9 @@
  */
 package Modelo;
 
+import java.sql.Date;
 import java.sql.Time;
-import java.util.Date;
+
 
 
 
@@ -72,7 +73,7 @@ public class Bitacora {
         
     }
 
-    public Date getHoraSalida() {
+    public Time getHoraSalida() {
         return horaSalida;
     }
 
@@ -102,7 +103,7 @@ public class Bitacora {
         
     }
 
-    public Date getHoraLlegada() {
+    public Time getHoraLlegada() {
         return horaLlegada;
     }
 

@@ -61,6 +61,11 @@ public class FrmInicio extends javax.swing.JFrame {
         menuRegistro.add(jMenuItem1);
 
         jMenuItem2.setText("Salidas");
+        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem2ActionPerformed(evt);
+            }
+        });
         menuRegistro.add(jMenuItem2);
 
         jMenuItem3.setText("Llegadas");
@@ -109,6 +114,13 @@ public class FrmInicio extends javax.swing.JFrame {
         v.setVisible(true);
         pantalla.add(v);
     }//GEN-LAST:event_jMenuItem1ActionPerformed
+
+    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
+        // TODO add your handling code here:
+        FrmBitacoraSalidas fb=new FrmBitacoraSalidas();
+        fb.setVisible(true);
+        pantalla.add(fb);
+    }//GEN-LAST:event_jMenuItem2ActionPerformed
 
     /**
      * @param args the command line arguments

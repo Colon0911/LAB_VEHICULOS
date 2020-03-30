@@ -15,7 +15,8 @@ import java.sql.PreparedStatement;
     import java.sql.SQLException;
     import java.sql.Statement;
     import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.ArrayList;
+
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -24,7 +25,7 @@ import java.util.logging.Logger;
  *
  * @author johan
  */
-public class controladorBitacora {
+public class controladorBitacora extends Bitacora{
       private Connection cn;
       private PreparedStatement pst;
       private ResultSet rs;
@@ -34,7 +35,7 @@ public class controladorBitacora {
           public void conectar(){
         try {
             this.cn = DriverManager.getConnection("jdbc:mysql://localhost/empresavehiculos?useServerPrepStmts=true", "root", "johansel");   
-            
+            System.out.println("conecto");
             pst = cn.prepareStatement("insert into bitacora values(null,?,?,?,?,?,?,?,?,?)");
         } catch (SQLException ex) {
             System.out.println("Error de conexion");
@@ -42,16 +43,21 @@ public class controladorBitacora {
     }
           public boolean  Agregar(Bitacora bitacora){
       try {
-            SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd");
-            this.pst.executeUpdate("insert into bitacora values(null,'"+bitacora.getPlaca()+"','"+bitacora.getProvincia()+"','"+bitacora.getDestino()+"','"+"'CURDATE()'"+"','"+"'CURTIME()'"+"','"+bitacora.getKInical()+"',null,null,null",Statement.RETURN_GENERATED_KEYS);
+           // SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd");
+            this.pst.executeUpdate("insert into bitacora values(null,'"
+                    +bitacora.getPlaca()+"','"
+                    +bitacora.getProvincia()+"','"
+                    +bitacora.getDestino()+"','"
+                    +"'CURDATE(),CURTIME()'"
+                    +"','"+bitacora.getKInical()+"',null,null,null",Statement.RETURN_GENERATED_KEYS);
             this.rs=this.pst.getGeneratedKeys();
+           
             if(rs.next()){
                 rs.getInt(1);
                 return true;
             }
         } catch (SQLException ex) {
-            System.out.println("ERROR AL AGREGAR");
-            
+            System.out.println("ERROR AL AGREGAR");    
         }
         return false;
     }
@@ -94,9 +100,74 @@ public class controladorBitacora {
             
             return true;
         }
+            public boolean eliminar(Bitacora bitacora){
+        try {
+                String placa=bitacora.getPlaca();
+                pst = cn.prepareStatement("select * from bitacora where placa = ?");
+                pst.setString(1, placa.trim());
+                rs=pst.executeQuery();
+            if (rs.next()) {
+                bitacora = new Bitacora(rs.getInt("id"),rs.getString("placa"),rs.getString("provincia"),rs.getString("destino"),rs.getDate("FechaSalida"),rs.getTime("HoraSalida"),rs.getInt("KInicial"),rs.getDate("FechaLlegada"),rs.getTime("FechaLlegada"),rs.getInt("KFinal"));
+                pst = cn.prepareStatement("delete from bitacora where id = "+bitacora.getId());
+                pst.executeUpdate(); 
+                return true;
+            }
+            
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(ControladorVehiculo.class.getName()).log(Level.SEVERE, null, ex);     
+        }
+        return false;
+    }
+    
+    
+    public ArrayList listar(String placa){
+        ArrayList<Bitacora> array=new ArrayList<>();
+        try {
+           
+           pst = cn.prepareStatement("select * from bitacora where placa like '"+placa.trim() +"%'");
+           rs=pst.executeQuery();
+           bitacora = new Bitacora(rs.getInt("id"),rs.getString("placa"),rs.getString("provincia"),rs.getString("destino"),rs.getDate("FechaSalida"),rs.getTime("HoraSalida"),rs.getInt("KInicial"),rs.getDate("FechaLlegada"),rs.getTime("FechaLlegada"),rs.getInt("KFinal"));
+           while (rs.next()) {
+                
+                array.add(bitacora);
+                  
+            }
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(ControladorVehiculo.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return array;
+    }
+     public boolean validarPK(Bitacora bitacora){
+         
+    
+        String placa=bitacora.getPlaca();
+        if(this.buscar(bitacora)!=bitacora){
+            System.out.println("no se encuentra");
+            return true;
+            
+        }else{
+            try {
+
+            pst = cn.prepareStatement("select * from bitacora where placa = ?");
+            pst.setString(1, placa.trim());
+            rs=pst.executeQuery();
+            if(rs.next()){
+                
+                System.out.println(rs.getInt("id"));
+                System.out.println(rs.getString("placa"));
+                System.out.println(rs.getString("descripcion"));
+            }
+        } catch (SQLException ex) {
+            System.out.println("ERROR EN EL READ"); 
+        }
+            return false;
+        }
+     }
         
         public static void main(String[] args) {
-            Date fecha= new Date();
+            
             SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd");
             
             
