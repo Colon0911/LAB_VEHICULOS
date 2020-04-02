@@ -117,10 +117,8 @@ public class ControladorVehiculo extends Vehiculo{
         }else{
             return false;
         }
-       
-        
-        
     }
+    
     public boolean eliminar(Vehiculo vehiculo){
         try {
                 String placa=vehiculo.getPlaca();
@@ -140,6 +138,7 @@ public class ControladorVehiculo extends Vehiculo{
         }
         return false;
     } 
+    
    public ArrayList listar(String descripcion){
         ArrayList<Vehiculo> array=new ArrayList<>();
         try {
@@ -149,8 +148,7 @@ public class ControladorVehiculo extends Vehiculo{
   
            while (rs.next()) {
                 vehiculo = new Vehiculo(rs.getInt("id"),rs.getString("placa"),rs.getString("descripcion"));
-                array.add(vehiculo);
-                  
+                array.add(vehiculo);      
             }
             
         } catch (SQLException ex) {
@@ -160,30 +158,14 @@ public class ControladorVehiculo extends Vehiculo{
     }
     
      public boolean validarPK(Vehiculo vehiculo){
-        String placa=vehiculo.getPlaca();
         if(this.buscar(vehiculo)!=vehiculo){
-            System.out.println("no se encuentra");
             return true;
             
         }else{
-            try {
-
-            pst = cn.prepareStatement("select * from vehiculos where placa = ?");
-            pst.setString(1, placa.trim());
-            rs=pst.executeQuery();
-            if(rs.next()){
-                
-                System.out.println(rs.getInt("id"));
-                System.out.println(rs.getString("placa"));
-                System.out.println(rs.getString("descripcion"));
-            }
-        } catch (SQLException ex) {
-            System.out.println("ERROR EN EL READ"); 
-        }
-            return false;
-        }
+            return false;   
+        }}
         
-    }
+    
     public boolean validarFK(){
         return true;
     }
@@ -191,21 +173,24 @@ public class ControladorVehiculo extends Vehiculo{
 
 public static void main(String[] args) {
    ControladorVehiculo n=new ControladorVehiculo();
-   Vehiculo v=new Vehiculo(0,"ut", "rojo");
+   Vehiculo v=new Vehiculo(0,"hol", "amarillo");
    Vehiculo vv=new Vehiculo(0,"qwet", "negro");
    Vehiculo vvf=new Vehiculo(0,"34567", "Camaro");
    Vehiculo vvv=new Vehiculo(0,"qqqwwet", "nsdegro");
+    n.conectar();
+   Vehiculo vc=new Vehiculo("hola");
 
    //n.conectar("mysql", "127.0.0.1", "root", "johansel");
-   n.conectar();
-   n.Agregar(vvf);
+  
+  // n.Agregar(vvf);
    //n.eliminar(100);
    //System.out.println(n.listar("n"));
    // n.actualizar(vvf, "amarillo");
      
- //  System.out.println(n.buscar(vvf));
-//   n.validarPK(v);
+    System.out.println(n.buscar(vc));
+  
+    System.out.println(n.validarPK(vc));
     
-     System.out.println( n.listar("b"));
+     //System.out.println( n.listar("n"));
   
 }}

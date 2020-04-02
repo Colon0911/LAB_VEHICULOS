@@ -6,25 +6,54 @@
 package tiendadevehiculos;
 
 import Modelo.Bitacora;
+import Modelo.ControladorVehiculo;
+import Modelo.Vehiculo;
 import Modelo.controladorBitacora;
 import com.toedter.calendar.JDateChooser;
-import java.sql.Date;
+
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Observable;
+import java.util.Observer;
 import javax.swing.JFormattedTextField;
+import javax.swing.JOptionPane;
+import javax.swing.SpinnerNumberModel;
 
 /**
  *
  * @author johan
  */
-public class FrmBitacoraSalidas extends javax.swing.JInternalFrame {
-     Bitacora bitacora=new Bitacora();
-     JDateChooser JDate=new JDateChooser();
-     JFormattedTextField JHora=new JFormattedTextField();
+public class FrmBitacoraSalidas extends javax.swing.JInternalFrame implements Observer{
+     public static Bitacora bitacoraActual;
+      controladorBitacora controladorBitacora=new controladorBitacora();
+      ControladorVehiculo controladorVehiculo=new ControladorVehiculo();
+    private ArrayList<Observer> observadores = new ArrayList<>();
+
+    public void agregarObservador(Observer o) {
+        observadores.add(o);
+    }
+
+    public void eliminarObservador(Observer o) {
+        observadores.remove(o);
+    }
+
+    public void notificarObservadores() {
+        for (Observer o : observadores) {
+            o.update(null, null);
+        }
+    }
+    
     /**
      * Creates new form FrmBitacora
      */
     public FrmBitacoraSalidas() {
+      
         initComponents();
+        Date d =new Date(); 
+        SimpleDateFormat f = new SimpleDateFormat("dd-MM-yyyy");
+        txtFechaSalida.setText(f.format(d));
+        txtHoraSalida.setText(d.getHours()+ ":" +d.getMinutes());
     }
 
     /**
@@ -50,6 +79,11 @@ public class FrmBitacoraSalidas extends javax.swing.JInternalFrame {
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Registro de salidas"));
 
         txtPlaca.setBorder(javax.swing.BorderFactory.createTitledBorder("Placa"));
+        txtPlaca.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtPlacaActionPerformed(evt);
+            }
+        });
 
         txtDescripcion.setBorder(javax.swing.BorderFactory.createTitledBorder("Descripcion"));
 
@@ -149,24 +183,77 @@ public class FrmBitacoraSalidas extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
-       
-     if (!txtPlaca.getText().isEmpty()) {
-                  String[] fecha=new SimpleDateFormat("yyyy-mm-dd").format(JDate.getDate()).split("-");
-        bitacora.setFechaLlegada(new java.sql.Date(Integer.parseInt(fecha[0]), Integer.parseInt(fecha[1]), Integer.parseInt(fecha[2])));
-        
-        String[] hora=JHora.getText().split(":");
-        bitacora.setHoraLlegada(new java.sql.Time(Integer.parseInt(hora[0]), Integer.parseInt(hora[1]), Integer.parseInt(hora[2])));
-     
-            controladorBitacora cb=new controladorBitacora();
-            cb.conectar();
-            bitacora=new Bitacora(bitacora.getId(),
-            txtPlaca.getText(), String.valueOf(cbProvincia.getSelectedIndex()), 
-            txtDestino.getText(), bitacora.getFechaSalida(), bitacora.getHoraSalida(),
-            bitacora.getKInical(), bitacora.getFechaLlegada(), bitacora.getHoraLlegada(),
-            bitacora.getKFinal());
-            cb.Agregar(bitacora);
+//        Bitacora bitacora = new Bitacora();
+//        Date fe=new Date();
+//         
+//        String[] fecha=new SimpleDateFormat("yyy-MM-dd").format(fe).split("-");
+//        bitacora.setFechaSalida(new java.sql.Date(Integer.parseInt(fecha[0])-1900, Integer.parseInt(fecha[1])-1, Integer.parseInt(fecha[2])));
+//        String[] hora=new SimpleDateFormat("hh: mm: ss").format(fe).split(":");
+//        bitacora.setHoraSalida(new java.sql.Time(Integer.parseInt(hora[0]), Integer.parseInt(hora[1]),0));
+//
+//
+//         
+         
+         controladorBitacora.conectar();
+         controladorVehiculo.conectar();
+         if (!txtPlaca.getText().isEmpty() && !txtDestino.getText().isEmpty()
+                && !txtFechaSalida.getText().isEmpty() && !txtHoraSalida.getText().isEmpty()) {
+            
+            if (controladorVehiculo.validarPK(new Vehiculo(txtPlaca.getText()))) {
+                Bitacora bitacora = new Bitacora();
+                bitacora.setPlaca(controladorVehiculo.buscar(new Vehiculo(txtPlaca.getText())));
+                System.out.println(bitacora);
+                if (controladorBitacora.validarPK(bitacora) 
+                        || !controladorBitacora.validarPK(bitacora)
+                        && controladorBitacora.buscar(bitacora).getFechaLlegada() != null) {
+
+                    
+                    System.out.println(controladorBitacora.buscar(bitacora));
+                    bitacora.setDestino(txtDestino.getText());
+                    bitacora.setProvincia(cbProvincia.getItemAt(cbProvincia.getSelectedIndex()));
+                    bitacora.setKInical((int) SpnKilometrajeInicial.getValue());
+                    System.out.println(bitacora);
+                    if (controladorBitacora.Agregar(bitacora)) {
+                        bitacoraActual = bitacora;
+                        JOptionPane.showMessageDialog(this, "Guardado exitoso");
+                    } else {
+                        JOptionPane.showMessageDialog(this, "Guardado fallido");
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(this, "Vehiculo no disponible");
+                }
+            } else {
+                JOptionPane.showMessageDialog(null, "Placa no existe", "Error", 0);
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "Falta información.");
         }
+     this.notificarObservadores();
+         
     }//GEN-LAST:event_btnGuardarActionPerformed
+
+   
+    private void txtPlacaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPlacaActionPerformed
+        // TODO add your handling code here:
+          String descripcion = txtPlaca.getText();
+        if (descripcion != null) {
+            Vehiculo carro = new Vehiculo(descripcion);
+            Bitacora bita = new Bitacora(carro);
+            Vehiculo mod = controladorVehiculo.buscar(carro);
+
+            if (!controladorBitacora.validarPK(bita)) {
+                txtDescripcion.setText(mod.getDescripcion());
+                
+                Bitacora bitamod = controladorBitacora.buscar(bita);
+                SpinnerNumberModel nm = new SpinnerNumberModel();
+                nm.setMinimum(bitamod.getKFinal());
+                SpnKilometrajeInicial.setModel(nm);
+                SpnKilometrajeInicial.setValue(bitamod.getKFinal());
+            } else {
+                JOptionPane.showMessageDialog(null, "Placa no existe", "Error", 0);
+            }
+        }
+    }//GEN-LAST:event_txtPlacaActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -181,4 +268,9 @@ public class FrmBitacoraSalidas extends javax.swing.JInternalFrame {
     private javax.swing.JTextField txtHoraSalida;
     private javax.swing.JTextField txtPlaca;
     // End of variables declaration//GEN-END:variables
+
+    @Override
+    public void update(Observable o, Object arg) {
+   
+    }
 }

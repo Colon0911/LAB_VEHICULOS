@@ -5,8 +5,9 @@
  */
 package Modelo;
 
-import java.sql.Date;
+
 import java.sql.Time;
+import java.util.Date;
 
 
 
@@ -17,7 +18,7 @@ import java.sql.Time;
  */
 public class Bitacora {
   private int id;
-  private String placa;
+  private Vehiculo vehiculo;
   private String provincia;
   private String destino;
   private Date fechaSalida;
@@ -35,12 +36,14 @@ public class Bitacora {
         this.id = id;
     }
 
-    public String getPlaca() {
-        return placa;
+    public Vehiculo getVehiculo() {
+        return vehiculo;
     }
 
-    public void setPlaca(String placa) {
-        this.placa = placa;
+   
+
+    public void setPlaca(Vehiculo placa) {
+        this.vehiculo=placa;
     }
 
     public String getProvincia() {
@@ -65,11 +68,11 @@ public class Bitacora {
     }
 
     public void setFechaSalida(Date fechaSalida) {
-        if (fechaSalida.before(fechaLlegada)) {
+//        if (fechaSalida.after(fechaLlegada)) {
             this.fechaSalida = fechaSalida;
-        }else{
-            System.out.println("No es posible");
-        }
+//        }else{
+//            System.out.println("No es posible");
+//        }
         
     }
 
@@ -86,7 +89,9 @@ public class Bitacora {
     }
 
     public void setKInical(int KInical) {
-        this.KInical = KInical;
+        if (this.KInical < KFinal) {
+           this.KInical = KInical;
+        }
     }
 
     public Date getFechaLlegada() {
@@ -95,11 +100,11 @@ public class Bitacora {
     }
 
     public void setFechaLlegada(Date fechaLlegada) {
-        if (fechaLlegada.after(fechaSalida)) {
+//        if (fechaLlegada.before(fechaSalida)) {
           this.fechaLlegada = fechaLlegada;
-        }else{
-               System.out.println("No es posible");
-        }
+//        }else{
+//               System.out.println("No es posible");
+//        }
         
     }
 
@@ -116,12 +121,14 @@ public class Bitacora {
     }
 
     public void setKFinal(int KFinal) {
-        this.KFinal = KFinal;
+        if (this.KFinal > KInical) {
+            this.KFinal = KFinal;
+        }
     }
 
     public Bitacora() {
         this.id = 0;
-        this.placa = null;
+        this.vehiculo = null;
         this.provincia = null;
         this.destino = null;
         this.fechaSalida = null;
@@ -131,9 +138,9 @@ public class Bitacora {
         this.horaLlegada = null;
         this.KFinal = 0;
     }
-    public Bitacora(String placa) {
+    public Bitacora(Vehiculo placa) {
         this.id = 0;
-        this.placa = placa;
+        this.vehiculo = placa;
         this.provincia = null;
         this.destino = null;
         this.fechaSalida = null;
@@ -144,9 +151,9 @@ public class Bitacora {
         this.KFinal = 0;
     }
 
-    public Bitacora(int id, String placa, String provincia, String destino, Date fechaSalida, Time horaSalida, int KInical, Date fechaLlegada, Time horaLlegada, int KFinal) {
+    public Bitacora(int id, Vehiculo placa, String provincia, String destino, Date fechaSalida, Time horaSalida, int KInical, Date fechaLlegada, Time horaLlegada, int KFinal) {
         this.id = id;
-        this.placa = placa;
+        this.vehiculo = placa;
         this.provincia = provincia;
         this.destino = destino;
         this.fechaSalida = fechaSalida;
@@ -157,7 +164,10 @@ public class Bitacora {
         this.KFinal = KFinal;
     }
     
-   
+    @Override
+    public String toString() {
+        return "Bitacora{" + "id=" + id + ", vehiculo=" + vehiculo + ", provincia=" + provincia + ", destino=" + destino + ", fechaSalida=" + fechaSalida + ", horaSalida=" + horaSalida + ", KInical=" + KInical + ", fechaLlegada=" + fechaLlegada + ", horaLlegada=" + horaLlegada + ", KFinal=" + KFinal + '}';
+    }
   
   
 }
