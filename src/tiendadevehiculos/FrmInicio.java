@@ -75,7 +75,7 @@ public class FrmInicio extends javax.swing.JFrame {
 
         menuConfiguracion.setText("Configuracion");
 
-        jMenuItem4.setText("jMenuItem4");
+        jMenuItem4.setText("Configuracion");
         jMenuItem4.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItem4ActionPerformed(evt);

@@ -18,8 +18,7 @@ import javax.swing.table.DefaultTableModel;
  */
 public class FrmVehiculos extends javax.swing.JInternalFrame {
     int idActual;
-    String placaActual;
-    String descripcionActual;
+    Vehiculo vehiculoAcual=new Vehiculo();
 
     /**
      * Creates new form FrmVehiculos
@@ -310,8 +309,7 @@ public class FrmVehiculos extends javax.swing.JInternalFrame {
             ControladorVehiculo cv=new ControladorVehiculo();
             Vehiculo v=new Vehiculo(0,txtPlaca.getText(), txtDescripcion.getText());
              this.idActual=v.getId();
-             this.placaActual=txtPlaca.getText();
-             this.descripcionActual=txtDescripcion.getText();
+             vehiculoAcual= new Vehiculo(0, txtPlaca.getText(), txtDescripcion.getText());
             cv.conectar();
             cv.Agregar(v);
             
@@ -335,8 +333,8 @@ public class FrmVehiculos extends javax.swing.JInternalFrame {
         if (!txtPlaca.getText().isEmpty() || !txtDescripcion.getText().isEmpty()) {
             txtPlaca.setText("");
             txtDescripcion.setText("");
-            txtPlaca.setText(placaActual);
-            txtDescripcion.setText(descripcionActual);
+            txtPlaca.setText(vehiculoAcual.getPlaca());
+            txtDescripcion.setText(vehiculoAcual.getDescripcion());
         }
     }//GEN-LAST:event_jButton4ActionPerformed
 

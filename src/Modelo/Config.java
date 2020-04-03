@@ -33,13 +33,7 @@ public class Config {
         if (!archivo.exists()) {
             try {
             archivo.createNewFile();
-            
-        } catch (IOException e) {
-            System.out.println("Error");
-        
-        }
-        }else{
-            try {
+             try {
                 FileWriter fw=new FileWriter(archivo, true);
                 BufferedWriter bw=new BufferedWriter(fw);
                 bw.write(txt);
@@ -47,6 +41,13 @@ public class Config {
             } catch (IOException ex) {
                 
             }
+            
+        } catch (IOException e) {
+            System.out.println("Error");
+        
+        }
+        }else{
+           
         }
     }
     

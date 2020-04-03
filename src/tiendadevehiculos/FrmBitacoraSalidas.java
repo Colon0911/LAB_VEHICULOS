@@ -9,14 +9,11 @@ import Modelo.Bitacora;
 import Modelo.ControladorVehiculo;
 import Modelo.Vehiculo;
 import Modelo.controladorBitacora;
-import com.toedter.calendar.JDateChooser;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.Observable;
 import java.util.Observer;
-import javax.swing.JFormattedTextField;
 import javax.swing.JOptionPane;
 import javax.swing.SpinnerNumberModel;
 
@@ -24,25 +21,11 @@ import javax.swing.SpinnerNumberModel;
  *
  * @author johan
  */
-public class FrmBitacoraSalidas extends javax.swing.JInternalFrame implements Observer{
+public class FrmBitacoraSalidas extends javax.swing.JInternalFrame {
      public static Bitacora bitacoraActual;
       controladorBitacora controladorBitacora=new controladorBitacora();
       ControladorVehiculo controladorVehiculo=new ControladorVehiculo();
-    private ArrayList<Observer> observadores = new ArrayList<>();
-
-    public void agregarObservador(Observer o) {
-        observadores.add(o);
-    }
-
-    public void eliminarObservador(Observer o) {
-        observadores.remove(o);
-    }
-
-    public void notificarObservadores() {
-        for (Observer o : observadores) {
-            o.update(null, null);
-        }
-    }
+    
     
     /**
      * Creates new form FrmBitacora
@@ -99,6 +82,11 @@ public class FrmBitacoraSalidas extends javax.swing.JInternalFrame implements Ob
         SpnKilometrajeInicial.setBorder(javax.swing.BorderFactory.createTitledBorder("Kilometraje inicial"));
 
         btnCancelar.setText("Cancelar");
+        btnCancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelarActionPerformed(evt);
+            }
+        });
 
         btnGuardar.setText("Guardar");
         btnGuardar.addActionListener(new java.awt.event.ActionListener() {
@@ -183,16 +171,7 @@ public class FrmBitacoraSalidas extends javax.swing.JInternalFrame implements Ob
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
-//        Bitacora bitacora = new Bitacora();
-//        Date fe=new Date();
-//         
-//        String[] fecha=new SimpleDateFormat("yyy-MM-dd").format(fe).split("-");
-//        bitacora.setFechaSalida(new java.sql.Date(Integer.parseInt(fecha[0])-1900, Integer.parseInt(fecha[1])-1, Integer.parseInt(fecha[2])));
-//        String[] hora=new SimpleDateFormat("hh: mm: ss").format(fe).split(":");
-//        bitacora.setHoraSalida(new java.sql.Time(Integer.parseInt(hora[0]), Integer.parseInt(hora[1]),0));
-//
-//
-//         
+      
          
          controladorBitacora.conectar();
          controladorVehiculo.conectar();
@@ -215,21 +194,13 @@ public class FrmBitacoraSalidas extends javax.swing.JInternalFrame implements Ob
                     System.out.println(bitacora);
                     if (controladorBitacora.Agregar(bitacora)) {
                         bitacoraActual = bitacora;
-                        JOptionPane.showMessageDialog(this, "Guardado exitoso");
+                        JOptionPane.showMessageDialog(this, "Informacion Guardada");
                     } else {
-                        JOptionPane.showMessageDialog(this, "Guardado fallido");
-                    }
-                } else {
-                    JOptionPane.showMessageDialog(this, "Vehiculo no disponible");
-                }
-            } else {
-                JOptionPane.showMessageDialog(null, "Placa no existe", "Error", 0);
-            }
+                        JOptionPane.showMessageDialog(this, "Error al Guardar");
+               } } } 
         } else {
             JOptionPane.showMessageDialog(this, "Falta información.");
-        }
-     this.notificarObservadores();
-         
+        }    
     }//GEN-LAST:event_btnGuardarActionPerformed
 
    
@@ -255,6 +226,10 @@ public class FrmBitacoraSalidas extends javax.swing.JInternalFrame implements Ob
         }
     }//GEN-LAST:event_txtPlacaActionPerformed
 
+    private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
+       dispose();
+    }//GEN-LAST:event_btnCancelarActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JSpinner SpnKilometrajeInicial;
@@ -269,8 +244,5 @@ public class FrmBitacoraSalidas extends javax.swing.JInternalFrame implements Ob
     private javax.swing.JTextField txtPlaca;
     // End of variables declaration//GEN-END:variables
 
-    @Override
-    public void update(Observable o, Object arg) {
-   
-    }
+    
 }
